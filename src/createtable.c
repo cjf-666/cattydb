@@ -9,12 +9,13 @@ void create_table(char* table_name)
 {
         int i;
         char file_name[MAXFILENAME];
-        strcpy(table_name,file_name);
+        strcpy(file_name,table_name);
         strcat(file_name,".m");
         p = out_buf_create(file_name,"wb");
         for (i = 0; table_name[i]; ++i)
                 buf_push_char(p, table_name[i]);
         buf_push_char(p, '\n');
+
 }
 void create_col(char* col_name,char* col_type,int num)
 {
