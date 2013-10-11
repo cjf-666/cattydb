@@ -33,8 +33,3 @@ void creat_table_on_close()
         buf_push_byte(p, '`');
         out_buf_remove(p);
 }
-int main()
-{
-
-        return 0;
-}
