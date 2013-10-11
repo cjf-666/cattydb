@@ -17,7 +17,7 @@ tuple_buffer* in_buf_create(char* df_name)
         tp->top = tp->buf + BUF_SIZE;
         return tp;
 }
-tuple_buffer* out_buf_create(char* df_name, char* modes)
+tuple_buffer* out_buf_create(char* df_name,char* modes)
 {
         tuple_buffer *tp = (tuple_buffer*) malloc(sizeof(tuple_buffer));
         tp->db_file = fopen(df_name, modes);
