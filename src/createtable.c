@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include "buffer.c"
-
-#define MAXFILENAME 256
+#include "createtable.h"
 
 tuple_buffer* p;
 void creat_table(char* table_name)

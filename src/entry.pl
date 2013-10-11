@@ -15,8 +15,20 @@ $msg = new IPC::Msg($key,0666 | IPC_CREAT) or die "can't create message queue: $
 sub send {
     $msg->snd($msgtype, shift @_, IPC_NOWAIT) or die "send HEAD failed: $!";
     while (@_) {
-        #say "$_[0]";
-	$msg->snd($msgtype, shift @_, IPC_NOWAIT) or die "send message failed: $!";
+        my $s = shift @_;
+        given ($s) {
+            when (/Char\((\d+)\)/) {
+                $s =~ s/Char(:?.)/Char/;
+                $msg->snd($msgtype, $s." ".$1, IPC_NOWAIT) or die "send message failed: $!";
+                say "$s", " ", $1;
+            }
+            when (/Int/) {
+                $msg->snd($msgtype, $s." ".4, IPC_NOWAIT) or die "send message failed: $!";
+            }
+            default {
+                $msg->snd($msgtype, shift @_, IPC_NOWAIT) or die "send message failed: $!";
+            }
+        }
     }
     #say "true";
     $msg->snd($msgtype, "TAIL", IPC_NOWAIT) or die "send TAIL failed: $!";

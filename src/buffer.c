@@ -1,14 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define BUF_SIZE 512
+#include "buffer.h"
 
 typedef struct tuple_buffer {
         unsigned char buf[BUF_SIZE];
         unsigned char *top;
         FILE* db_file;
-} tuple_buffer;
+};
 
 tuple_buffer* in_buf_create(char* df_name)
 {
