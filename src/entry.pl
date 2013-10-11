@@ -16,11 +16,13 @@ sub send {
     $msg->snd($msgtype, shift @_, IPC_NOWAIT) or die "send HEAD failed: $!";
     while (@_) {
         my $s = shift @_;
+        my $len;
         given ($s) {
             when (/Char\((\d+)\)/) {
-                $s =~ s/Char(:?.)/Char/;
-                $msg->snd($msgtype, $s." ".$1, IPC_NOWAIT) or die "send message failed: $!";
-                say "$s", " ", $1;
+                $len = $1;
+                $s =~ s/Char\(.\)/Char/;
+                $msg->snd($msgtype, $s." ".$len, IPC_NOWAIT) or die "send message failed: $!";
+                print "$s\n";
             }
             when (/Int/) {
                 $msg->snd($msgtype, $s." ".4, IPC_NOWAIT) or die "send message failed: $!";
@@ -36,7 +38,7 @@ sub send {
 
 while (<STDIN>) {
     given ($_) {
-	when (/CREATE +TABLE +(.+)\((.+)\)/) {
+	when (/CREATE +TABLE +([a-zA-Z]+)\((.+)\)/) {
 	    my $tb_name = $1;
 	    my $tb_arg = $2;
 	    &send(0, $tb_name, (split / *, */, $tb_arg));}
