@@ -1,0 +1,37 @@
+//////需要完成的DBMS功能
+建立表： CRATE TABLE Student(sid CHAR(10), name CHAR(10),age INT);
+描述表： DESCRIBE student;
+插入： 	 INSERT INTO student VALUES("","","");
+删除：	 DELETE FROM student WHERE sid = "";
+更新：	 UPDATE student SET age = "20" WHERE name = "Bob";
+投影：   SELECT sid FROM student;  结果输出到temp
+等值链接：XXXX WHERE table1.colx = table2.coly; 结果输出到temp
+select*：SELECT * FROM student;    结果输出到temp
+
+/////C语言模块
+/*与dbms功能对应部分*/
+建立表：create_table(char* table_name,char* col_name1,char* col_type1,...,char* col_nameN,char* col_typeN);
+描述表：describe(char* table_name);
+插入：insert(char* table_name,char* col_value1,...,char* col_valueN);
+删除：delete(char* table_name,char* col_name,char* col_value)//只能有一个等于的条件
+更新：update(char* table_name,char* set_col_name, char* set_col_value, char* col_name,char* col_value)//同上
+投影：projection(char* table_name,char* col_name1,...,char* col_nameN);
+等值链接：connection(char* table_name1, char* table_name2, char* col_name1, char* col_name2, char* col_value);
+select*：show_value(char* table_name);
+
+/*其他*/
+analyse(char* cmd) //分析输入的查询语句以选择不同对应的函数
+
+
+/////文件结构
+对于每一个table
+    table_name.db table_name.m
+    table_name.db直接保存每一条的内容 线性分布
+    table_name.m 保存表的结构形如 student(C10,sid,C10,name,I,age)
+                             表示 student(sid char(10),name char(10),age int);
+
+
+Student
+C10 sid
+C10 name
+Int age
