@@ -1,3 +1,6 @@
+#ifndef DBMS_DESCRIBE
+#define DBMS_DESCRIBE
+
 #include <stdio.h>
 #include <string.h>
 #include "buffer.c"
@@ -43,4 +46,4 @@ void describe_table(char* table_name)
         }
 }
 
-
+#endif // DBMS_DESCRIBE
