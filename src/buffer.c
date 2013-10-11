@@ -13,7 +13,7 @@ tuple_buffer* in_buf_create(char* df_name)
         tp->top = tp->buf + BUF_SIZE;
         return tp;
 }
-tuple_buffer* out_buf_create(char* df_name, char* modes)
+tuple_buffer* out_buf_create(char* df_name,char* modes)
 {
         tuple_buffer *tp = (tuple_buffer*) malloc(sizeof(tuple_buffer));
         tp->db_file = fopen(df_name, modes);
@@ -56,7 +56,7 @@ void _push_byte(tuple_buffer *tp, unsigned char tmp)
         *(tp->top++) = tmp;
 
 }
-void buf_push_byte(tuple_buffer *tp, char tmp)
+void buf_push_char(tuple_buffer *tp, char tmp)
 {
         _push_byte(tp,(unsigned char)tmp);
 }
@@ -78,3 +78,4 @@ void in_buf_remove(tuple_buffer *tp)
         fclose(tp->db_file);
         free(tp);
 }
+
