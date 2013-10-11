@@ -8,6 +8,6 @@
 
 #define MAXFILENAME 256
 
-void creat_table(char* table_name);
-void creat_col(char* col_name,char* col_type,int num);
-void creat_table_on_close();
+void create_table(char* table_name);
+void create_col(char* col_name,char* col_type,int num);
+void create_table_on_close();

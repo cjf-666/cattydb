@@ -1,5 +1,6 @@
 #include "errhdl.h"
 #include "createtable.h"
+#include "describe.h"
 
 #include <sys/msg.h>
 #include <stdio.h>
@@ -32,19 +33,25 @@ int main(int args, char* argvs[])
         case '0':
             result=receive(IPC_NOWAIT);
             string_item.text[result]='\0';
-            creat_table(string_item.text);
+            create_table(string_item.text);
             result = 0;
             while ((result = receive(IPC_NOWAIT)) != -1) {
                 string_item.text[result]='\0';
                 if (!strcmp(string_item.text, "TAIL"))
                     break;
                 sscanf(string_item.text, "%s %s %d", col_type, col_name, &col_length);
-                creat_col(col_name, col_type, col_length);
+                create_col(col_name, col_type, col_length);
             }
             if (-1 == result)
                 ipc_msgrcv_failed(errno);
 
-            creat_table_on_close();
+            create_table_on_close();
+            break;
+        case '1':
+            result=receive(IPC_NOWAIT);
+            string_item.text[result]='\0';
+            printf("%s\n", string_item.text);
+            describe_table(string_item.text);
             break;
         }
     }

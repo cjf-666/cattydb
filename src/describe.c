@@ -1,11 +1,4 @@
-#ifndef DBMS_DESCRIBE
-#define DBMS_DESCRIBE
-
-#include <stdio.h>
-#include <string.h>
-#include "buffer.c"
-
-#define MAXFILENAME 256
+#include "describe.h"
 
 void describe_table(char* table_name)
 {
@@ -46,4 +39,3 @@ void describe_table(char* table_name)
         }
 }
 
-#endif // DBMS_DESCRIBE

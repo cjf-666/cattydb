@@ -18,32 +18,29 @@ sub send {
         my $s = shift @_;
         my $len;
         given ($s) {
-            when (/Char\((\d+)\)/) {
+            when (/Char\(([0-9]+)\)/) {
                 $len = $1;
-                $s =~ s/Char\(.\)/Char/;
+                $s =~ s/Char\(.+\)/Char/;
                 $msg->snd($msgtype, $s." ".$len, IPC_NOWAIT) or die "send message failed: $!";
-                print "$s\n";
             }
             when (/Int/) {
                 $msg->snd($msgtype, $s." ".4, IPC_NOWAIT) or die "send message failed: $!";
             }
             default {
-                $msg->snd($msgtype, shift @_, IPC_NOWAIT) or die "send message failed: $!";
+                $msg->snd($msgtype, $s, IPC_NOWAIT) or die "send message failed: $!";
             }
         }
     }
-    #say "true";
-    $msg->snd($msgtype, "TAIL", IPC_NOWAIT) or die "send TAIL failed: $!";
 }
 
 while (<STDIN>) {
     given ($_) {
 	when (/CREATE +TABLE +([a-zA-Z]+)\((.+)\)/) {
-	    my $tb_name = $1;
-	    my $tb_arg = $2;
-	    &send(0, $tb_name, (split / *, */, $tb_arg));}
+	    my $tb_name = $1;          
+	    my $tb_arg = $2;         
+	    &send(0, $tb_name, (split / *, */, $tb_arg), "TAIL");}
 	when (/DESCRIBE +(.*)/) {
-	    &send($1);}
+	    &send(1,$1);}
 	when (/INSERT +INTO +(.+) +VALUES +(.+)/) {
 	    &send($1,$2);}
 	when (/DELETE FROM (.+) WHERE (.+)/) {}
