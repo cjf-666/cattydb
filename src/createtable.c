@@ -5,7 +5,7 @@
 #define MAXFILENAME 256
 
 tuple_buffer* p;
-void creat_table(char* table_name)
+void create_table(char* table_name)
 {
         int i;
         char file_name[MAXFILENAME];
@@ -16,7 +16,7 @@ void creat_table(char* table_name)
                 buf_push_char(p, table_name[i]);
         buf_push_char(p, '\n');
 }
-void creat_col(char* col_name,char* col_type,int num)
+void create_col(char* col_name,char* col_type,int num)
 {
         int i;
         for (i = 0; col_name[i]; ++i)
@@ -28,10 +28,8 @@ void creat_col(char* col_name,char* col_type,int num)
         buf_push_int(p, num);
         buf_push_char(p, '\n');
 }
-void creat_table_on_close()
+void create_table_on_close()
 {
         buf_push_char(p, '`');
         out_buf_remove(p);
 }
-
-
