@@ -3,17 +3,23 @@ use strict;
 use warnings;
 use utf8;
 
+
 use IPC::SysV qw(IPC_CREAT IPC_NOWAIT);
 use IPC::Msg;
 
 my ($key, $msg, $msgtype);
 $key = 3570;
-&msg = new IPC::Msg($key,0666 | IPC_CREAT) or die "can't create message queue: $!";
+$msgtype = 1;
+$msg = new IPC::Msg($key,0666 | IPC_CREAT) or die "can't create message queue: $!";
 
 sub send {
+    $msg->snd($msgtype, shift @_, IPC_NOWAIT) or die "send HEAD failed: $!";
     while (@_) {
-	$msg->snd($msgtype, unshift @_, IPC_NOWAIT) or die "send message failed: $!";
+        #say "$_[0]";
+	$msg->snd($msgtype, shift @_, IPC_NOWAIT) or die "send message failed: $!";
     }
+    #say "true";
+    $msg->snd($msgtype, "TAIL", IPC_NOWAIT) or die "send TAIL failed: $!";
 }
 
 while (<STDIN>) {
@@ -21,7 +27,7 @@ while (<STDIN>) {
 	when (/CREATE +TABLE +(.+)\((.+)\)/) {
 	    my $tb_name = $1;
 	    my $tb_arg = $2;
-	    &send($tb_name,(split / *, */,$tb_arg));}
+	    &send(0, $tb_name, (split / *, */, $tb_arg));}
 	when (/DESCRIBE +(.*)/) {
 	    &send($1);}
 	when (/INSERT +INTO +(.+) +VALUES +(.+)/) {
