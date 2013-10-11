@@ -1,3 +1,6 @@
+#ifndef DMBS_CREATETABLE
+#define DMBS_CREATETABLE
+
 #include <stdio.h>
 #include <string.h>
 #include "buffer.c"
@@ -15,7 +18,6 @@ void create_table(char* table_name)
         for (i = 0; table_name[i]; ++i)
                 buf_push_char(p, table_name[i]);
         buf_push_char(p, '\n');
-
 }
 void create_col(char* col_name,char* col_type,int num)
 {
@@ -34,3 +36,5 @@ void create_table_on_close()
         buf_push_char(p, '`');
         out_buf_remove(p);
 }
+
+#endif // DMBS_CREATETABLE
