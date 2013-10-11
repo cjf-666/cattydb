@@ -1,3 +1,6 @@
+#ifndef DBMS_BUFFER
+#define DBMS_BUFFER
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -82,3 +85,4 @@ void in_buf_remove(tuple_buffer *tp)
         fclose(tp->db_file);
         free(tp);
 }
+#endif // DBMS_BUFFER
