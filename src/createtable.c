@@ -11,7 +11,7 @@ void creat_table(char* table_name)
         char file_name[MAXFILENAME];
         strcpy(table_name,file_name);
         strcat(file_name,".m");
-        tuple_buffer* p = out_buf_create(file_name,"wb");
+        p = out_buf_create(file_name,"wb");
         for (i = 0; table_name[i]; ++i)
                 buf_push_byte(p, table_name[i]);
         buf_push_byte(p, '\n');
@@ -32,9 +32,4 @@ void creat_table_on_close()
 {
         buf_push_byte(p, '`');
         out_buf_remove(p);
-}
-int main()
-{
-
-        return 0;
 }
