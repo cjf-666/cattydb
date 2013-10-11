@@ -60,7 +60,7 @@ void _push_byte(tuple_buffer *tp, unsigned char tmp)
         *(tp->top++) = tmp;
 
 }
-void buf_push_byte(tuple_buffer *tp, char tmp)
+void buf_push_char(tuple_buffer *tp, char tmp)
 {
         _push_byte(tp,(unsigned char)tmp);
 }
