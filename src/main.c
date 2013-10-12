@@ -1,6 +1,7 @@
 #include "errhdl.h"
 #include "createtable.h"
 #include "describe.h"
+#include "insert.h"
 
 #include <sys/msg.h>
 #include <stdio.h>
@@ -50,8 +51,23 @@ int main(int args, char* argvs[])
         case '1':
             result=receive(IPC_NOWAIT);
             string_item.text[result]='\0';
-            printf("%s\n", string_item.text);
+            //printf("%s\n", string_item.text);
             describe_table(string_item.text);
+            break;
+        case '2':
+            result = receive(IPC_NOWAIT);
+            string_item.text[result]='\0';
+            printf("%s\n", string_item.text);
+            insert_on_open(strcat(string_item.text,".dat"));
+            while ((result = receive(IPC_NOWAIT)) != -1) {
+                string_item.text[result]='\0';
+                if (!strcmp(string_item.text, "TAIL"))
+                    break;
+                insert_item(string_item.text);
+            }
+            if (-1 == result)
+                ipc_msgrcv_failed(errno);
+            insert_on_close();
             break;
         }
     }
