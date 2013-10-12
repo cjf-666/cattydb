@@ -20,7 +20,7 @@ struct msg_st
 int main(int args, char* argvs[])
 {
     int result, col_length;
-    char col_type[10], col_name[10];
+    char col_type[100], col_name[100];
     struct msg_st string_item;
     int msgqid;
 
@@ -68,6 +68,30 @@ int main(int args, char* argvs[])
             if (-1 == result)
                 ipc_msgrcv_failed(errno);
             insert_on_close();
+            break;
+        case '3':
+            result = receive(IPC_NOWAIT);
+            string_item.text[result]='\0';
+            printf("%s\n", string_item.text);
+            strcpy(tb_name, string_item.text);
+            int i = 0;
+            while ((result = receive(IPC_NOWAIT)) != -1) {
+                string_item.text[result]='\0';
+                if (!strcmp(string_item.text, "TAIL"))
+                    break;
+                strcpy(tmp[i++], string_item.text);
+            }
+            if (-1 == result)
+                ipc_msgrcv_failed(errno);
+            delete();
+            break;
+        case '7':
+            result = receive(IPC_NOWAIT);
+            string_item.text[result]='\0';
+            printf("%s\n", string_item.text);
+            select_on_open(string_item.text);
+            select_all();
+            select_on_close();
             break;
         }
     }

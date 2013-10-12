@@ -1,19 +1,20 @@
 #include "insert.h"
 
 FILE* dat_file;
+char buf[512];
+char* cur;
 
 void insert_on_open(const char* file)
 {
-    dat_file = fopen(file, "a+b");
+    dat_file = fopen(file, "ab");
+    memset(buf, 0, sizeof(buf));
+    cur = buf;
 }
-
-char buf[512];
-char* cur = buf;
 
 void insert_item(const char* val)
 {
     if (*val == '\"') {
-        sscanf(val, "\"%s", cur);
+        strcpy(cur, val+1);
         cur += 10;
     }
     else {

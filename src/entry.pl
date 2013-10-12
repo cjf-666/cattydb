@@ -48,6 +48,7 @@ while (<STDIN>) {
 	when (/INSERT +INTO +(.+) +VALUES *\((.+)\)/) {
             my $tb_name = $1;
             my $tb_vl = $2;
+           
 	    &send(2, $tb_name, (split / *, */, $tb_vl), "TAIL");
         }
 	when (/DELETE FROM (.+) WHERE (.+)/) {
@@ -56,9 +57,15 @@ while (<STDIN>) {
             &send(3, $tb_name, split / *= */, $tb_vl);
         }
 	when (/UPDATE (.+) SET (.+) WHERE (.+)/) {}
-	when (/SELECT (.+) FROM (.+)/) {}
+	when (/SELECT (.+) FROM (.+)/) {
+            if ($1 eq '*') {
+                &send(7,$2);
+            }
+            else {
+                &send(5,$2);
+            }
+        }
 	when (/SELECT (.+) FROM (.+) WHERE/) {}
-	when (/SELECT \* FROM (.+)/) {}
     }
 }
 

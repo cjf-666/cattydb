@@ -3,6 +3,7 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 
 void insert_on_open(const char*);
 void insert_item(const char*);
