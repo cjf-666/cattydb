@@ -1,0 +1,4 @@
+INSERT INTO Product VALUES("abc", 1, "good")
+INSERT INTO Product VALUES("ac", 3, "not good")
+INSERT INTO Product VALUES("ab", 2, "very good")
+INSERT INTO Product VALUES("bc", 4, "bad")

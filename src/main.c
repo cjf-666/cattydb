@@ -20,9 +20,10 @@ struct msg_st
 int main(int args, char* argvs[])
 {
     int result, col_length;
-    char col_type[100], col_name[100];
+    char col_type[ITEM_TYPE_LEN], col_name[ITEM_NAME_LEN];
     struct msg_st string_item;
     int msgqid;
+    char tb_name[TABLE_NAME_LEN];
 
     msgqid = msgget((key_t)3570, 0666 | IPC_CREAT);
     if (msgqid == -1) {
@@ -32,11 +33,11 @@ int main(int args, char* argvs[])
     while (receive(0)) {
         switch (*string_item.text) {        
         case '0':
-            result=receive(IPC_NOWAIT);
+            result=receive(0);
             string_item.text[result]='\0';
             create_table(string_item.text);
             result = 0;
-            while ((result = receive(IPC_NOWAIT)) != -1) {
+            while ((result = receive(0)) != -1) {
                 string_item.text[result]='\0';
                 if (!strcmp(string_item.text, "TAIL"))
                     break;
@@ -49,17 +50,21 @@ int main(int args, char* argvs[])
             create_table_on_close();
             break;
         case '1':
-            result=receive(IPC_NOWAIT);
+            result=receive(0);
             string_item.text[result]='\0';
             //printf("%s\n", string_item.text);
             describe_table(string_item.text);
             break;
         case '2':
-            result = receive(IPC_NOWAIT);
+            result = receive(0);
             string_item.text[result]='\0';
             printf("%s\n", string_item.text);
-            insert_on_open(strcat(string_item.text,".dat"));
-            while ((result = receive(IPC_NOWAIT)) != -1) {
+           
+            insert_on_open(string_item.text);
+            while (1) {
+                printf("%s\n", "INSERT");
+                result = -1;
+                while ((result = receive(IPC_NOWAIT)) == -1);
                 string_item.text[result]='\0';
                 if (!strcmp(string_item.text, "TAIL"))
                     break;
@@ -70,23 +75,26 @@ int main(int args, char* argvs[])
             insert_on_close();
             break;
         case '3':
-            result = receive(IPC_NOWAIT);
+            result = receive(0);
             string_item.text[result]='\0';
             printf("%s\n", string_item.text);
             strcpy(tb_name, string_item.text);
             int i = 0;
-            while ((result = receive(IPC_NOWAIT)) != -1) {
+            while ((result = receive(0)) != -1) {
                 string_item.text[result]='\0';
                 if (!strcmp(string_item.text, "TAIL"))
                     break;
-                strcpy(tmp[i++], string_item.text);
+                //strcpy(tmp[i++], string_item.text);
             }
             if (-1 == result)
                 ipc_msgrcv_failed(errno);
-            delete();
+            //delete();
             break;
+        case '6':
+            puts("hey!\n");
+            exit(0);
         case '7':
-            result = receive(IPC_NOWAIT);
+            result = receive(0);
             string_item.text[result]='\0';
             printf("%s\n", string_item.text);
             select_on_open(string_item.text);

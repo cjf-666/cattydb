@@ -27,7 +27,7 @@ sub send {
                 $msg->snd($msgtype, $s." ".4, IPC_NOWAIT) or die "send message failed: $!";
             }
             when (/"(.+)"/) {
-                $s =~ s/"(.+)"/"$1/;
+                $s =~ s/"(.+)"/$1/;
                 $msg->snd($msgtype, $s, IPC_NOWAIT) or die "send message failed: $!";
             }
             default {
@@ -66,6 +66,7 @@ while (<STDIN>) {
             }
         }
 	when (/SELECT (.+) FROM (.+) WHERE/) {}
+        when (/#quit/) {&send(6);}
     }
 }
 
