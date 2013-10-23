@@ -58,13 +58,9 @@ int main(int args, char* argvs[])
         case '2':
             result = receive(0);
             string_item.text[result]='\0';
-            printf("%s\n", string_item.text);
-           
+            //printf("%s\n", string_item.text);
             insert_on_open(string_item.text);
-            while (1) {
-                printf("%s\n", "INSERT");
-                result = -1;
-                while ((result = receive(IPC_NOWAIT)) == -1);
+            while ((result=receive(0)) != -1) {
                 string_item.text[result]='\0';
                 if (!strcmp(string_item.text, "TAIL"))
                     break;

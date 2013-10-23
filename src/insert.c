@@ -15,14 +15,16 @@ void insert_on_open(char* file)
 
 void insert_item(const char* val)
 {
-    int b = get_by_num[tot];
+    int b;
     if (!strcmp(get_type_by_num(tot), "Int")) {
         sscanf(val, "%d", &b);
         buf_push_int(dat_file, b);
     }
     else {
-        while (*val != '\0') {
-            buf_push_char(dat_file, *val++);
+        b = get_by_num(tot);
+        while (b--) {
+            buf_push_char(dat_file, *val);
+            if (*val != '\0') ++val;
         }
     }
     ++tot;

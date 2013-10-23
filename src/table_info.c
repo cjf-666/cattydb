@@ -4,6 +4,7 @@ struct item_st {
     char item_name[ITEM_NAME_LEN];
     char item_type[ITEM_TYPE_LEN];
     int  item_byte;
+    int is_pr;
 } item_arr[ITEM_NUM];
 
 char table_name[TABLE_NAME_LEN];
@@ -22,8 +23,10 @@ void table_set(const char* tb_name)
     fscanf(m_f, "%s\n", tmp_name);
 
     item_num = 0;
+    
     while (!feof(m_f)) {
-        fscanf(m_f, "%s %s %d\n",
+        fscanf(m_f, "%d %s %s %d\n",
+               &item_arr[item_num].is_pr,
                item_arr[item_num].item_name,
                item_arr[item_num].item_type,
                &item_arr[item_num].item_byte);
