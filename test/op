@@ -3,3 +3,5 @@ INSERT INTO Product VALUES("ac", 3, "notgood")
 INSERT INTO Product VALUES("ab", 2, "verygood")
 INSERT INTO Product VALUES("bc", 4, "bad")
 DELETE FROM Product WHERE quality = "verygood"
+
+DELETE FROM product WHERE ID = 123

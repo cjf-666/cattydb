@@ -13,13 +13,12 @@ int where_equal1(tuple_buffer* tp, char* col_name, char* val)
     
     int tot = get_bef_by_name(col_name);
     buf_move_forward(tp, tot);
-
     tot = get_tot_bytes(col_name) - tot - get_by_name(col_name);
-    buf_move_forward(tp, tot);
 
     if (!strcmp(get_type_by_name(col_name), "Int")) {
         int_data = buf_get_int(tp);
         sscanf(val, "%d", &i);
+        buf_move_forward(tp, tot);
         if (int_data == i)
         {
             return -1;
@@ -30,6 +29,7 @@ int where_equal1(tuple_buffer* tp, char* col_name, char* val)
         for(i=0; i<tot; i++)
             str_data[i] = buf_get_char(tp);
         str_data[i] = '\0';
+        buf_move_forward(tp, tot);
         if (!strcmp(str_data, val)) {
             return -1;
         }
