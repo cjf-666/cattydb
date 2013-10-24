@@ -74,9 +74,9 @@ int get_bef_by_name(const char* it_nm)
     int i = 0;
     int tot = 0;
     for (;i < item_num; i++) {
-        tot += get_by_num(i);
         if (!strcmp(item_arr[i].item_name, it_nm))
             return tot;
+        tot += get_by_num(i);
     }
     item_name_not_exist();
 }
