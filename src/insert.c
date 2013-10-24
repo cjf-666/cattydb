@@ -32,5 +32,6 @@ void insert_item(const char* val)
 
 void insert_on_close()
 {
+    puts("CATTYDB : successfully inserted");
     out_buf_remove(dat_file);
 }

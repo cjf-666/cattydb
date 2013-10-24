@@ -9,18 +9,23 @@ typedef struct tuple_buffer {
 
 int eobuf(tuple_buffer* tp)
 {
-    if (feof(tp->db_file) && tp->top == tp->buf + tp->byte_num)
-        return -1;
-    else
-        return 0;
+    if (tp->top == tp->buf + tp->byte_num)
+    {
+        if (feof(tp->db_file)) return -1;
+        buf_move_forward(tp, 1);
+        if (tp->byte_num==0)
+            return -1;
+        else buf_move_backward(tp, 1);
+    }
+    return 0;
 }
 
 tuple_buffer* in_buf_create(char* df_name)
 {
     tuple_buffer *tp = (tuple_buffer*) malloc(sizeof(tuple_buffer));
     tp->db_file = fopen(df_name, "rb");
-    tp->top = tp->buf + BUF_SIZE;
-    tp->byte_num = 0;
+    tp->byte_num = fread(tp->buf, 1, BUF_SIZE, tp->db_file);
+    tp->top = tp->buf;
     return tp;
 }
 
@@ -37,8 +42,8 @@ tuple_buffer* update_buf_create(char* df_name)
 {
     tuple_buffer *tp = (tuple_buffer*) malloc(sizeof(tuple_buffer));
     tp->db_file = fopen(df_name, "r+b");
-    tp->top = tp->buf + BUF_SIZE;
-    tp->byte_num = 0;
+    tp->byte_num = fread(tp->buf, 1, BUF_SIZE, tp->db_file);
+    tp->top = tp->buf;
     return tp;
 }
 
@@ -92,12 +97,35 @@ void buf_push_int(tuple_buffer *tp, int tmp)
 void _update_byte(tuple_buffer *tp, unsigned char tmp)
 {
     if (tp->top == tp->buf + tp->byte_num) {
-        fseek(tp->db_file, ftell(tp->db_file) - tp->byte_num, SEEK_SET);
+        fseek(tp->db_file, -tp->byte_num, SEEK_CUR);
         fwrite(tp->buf, 1, BUF_SIZE, tp->db_file);
         tp->byte_num = fread(tp->buf, 1, BUF_SIZE, tp->db_file);
         tp->top = tp->buf;
     }
-    *tp -> top++ = tmp;
+    *tp->top++ = tmp;
+}
+
+void _update_byte_org(tuple_buffer *tp)
+{
+    if (tp->top == tp->buf + tp->byte_num) {
+        fseek(tp->db_file, -tp->byte_num, SEEK_CUR);
+        fwrite(tp->buf, 1, BUF_SIZE, tp->db_file);
+        tp->byte_num = fread(tp->buf, 1, BUF_SIZE, tp->db_file);
+        tp->top = tp->buf;
+    }
+    tp->top++;
+}
+
+void _get_byte_r(tuple_buffer *tp)
+{
+    if (tp->top == tp->buf - 1) {
+        fseek(tp->db_file, -tp->byte_num, SEEK_CUR);
+        fwrite(tp->buf, 1, tp->byte_num, tp->db_file);
+        fseek(tp->db_file, -BUF_SIZE-(tp->byte_num), SEEK_CUR);
+        tp->byte_num = fread(tp->buf, 1, BUF_SIZE, tp->db_file);
+        tp->top = tp->buf+tp->byte_num-1;
+    }
+    tp->top--;
 }
 
 void buf_update_char(tuple_buffer *tp, char tmp)
@@ -127,8 +155,22 @@ void in_buf_remove(tuple_buffer *tp)
 
 void update_buf_remove(tuple_buffer *tp)
 {
-    fseek(tp->db_file, ftell(tp->db_file) - tp->byte_num, SEEK_SET);
-    fwrite(tp->buf, 1, BUF_SIZE, tp->db_file);
+    fseek(tp->db_file, -tp->byte_num, SEEK_CUR);
+    fwrite(tp->buf, 1, tp->byte_num, tp->db_file);
     fclose(tp->db_file);
     free(tp);
+}
+
+void buf_move_forward(tuple_buffer *tp, int offset)
+{
+    int i = 0;
+    for (; i < offset; i++)
+        _update_byte_org(tp);
+}
+
+void buf_move_backward(tuple_buffer *tp, int offset)
+{
+    int i = 0;
+    for (; i < offset; i++)
+        _get_byte_r(tp);
 }

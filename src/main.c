@@ -2,12 +2,12 @@
 #include "createtable.h"
 #include "describe.h"
 #include "insert.h"
+#include "delete.h"
 
 #include <sys/msg.h>
 #include <stdio.h>
 #include <string.h>
 
-#define STRING_LENGTH 100
 #define COMAND_LENGTH 1
 #define receive(x) msgrcv(msgqid, (void *)&string_item, STRING_LENGTH, 1, x)
 
@@ -24,6 +24,7 @@ int main(int args, char* argvs[])
     struct msg_st string_item;
     int msgqid;
     char tb_name[TABLE_NAME_LEN];
+    char tmp[10][ITEM_NAME_LEN];
 
     msgqid = msgget((key_t)3570, 0666 | IPC_CREAT);
     if (msgqid == -1) {
@@ -73,21 +74,23 @@ int main(int args, char* argvs[])
         case '3':
             result = receive(0);
             string_item.text[result]='\0';
-            printf("%s\n", string_item.text);
-            strcpy(tb_name, string_item.text);
+            //printf("%s\n", string_item.text);
+            delete_on_open(string_item.text);
             int i = 0;
             while ((result = receive(0)) != -1) {
                 string_item.text[result]='\0';
                 if (!strcmp(string_item.text, "TAIL"))
                     break;
+                delete(string_item.text);
                 //strcpy(tmp[i++], string_item.text);
+                //puts(tmp[i-1]);
             }
             if (-1 == result)
                 ipc_msgrcv_failed(errno);
-            //delete();
+            puts("del suc!");
             break;
         case '6':
-            puts("hey!\n");
+            puts("bye");
             exit(0);
         case '7':
             result = receive(0);

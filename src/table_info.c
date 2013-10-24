@@ -9,6 +9,7 @@ struct item_st {
 
 char table_name[TABLE_NAME_LEN];
 int item_num;
+int tot_bytes;
 
 void table_set(const char* tb_name)
 {
@@ -23,6 +24,7 @@ void table_set(const char* tb_name)
     fscanf(m_f, "%s\n", tmp_name);
 
     item_num = 0;
+    tot_bytes = 0;
     
     while (!feof(m_f)) {
         fscanf(m_f, "%d %s %s %d\n",
@@ -30,6 +32,7 @@ void table_set(const char* tb_name)
                item_arr[item_num].item_name,
                item_arr[item_num].item_type,
                &item_arr[item_num].item_byte);
+        tot_bytes += item_arr[item_num].item_byte;
         item_num++;
     }
     fclose(m_f);
@@ -64,7 +67,7 @@ const char* get_type_by_name(const char* name)
     int i = 0;
     for (;i < item_num; i++) {
         if (!strcmp(item_arr[i].item_name, name))
-            return item_arr[i].item_name;
+            return item_arr[i].item_type;
     }
     item_name_not_exist();
 }
@@ -79,4 +82,9 @@ int get_bef_by_name(const char* it_nm)
         tot += get_by_num(i);
     }
     item_name_not_exist();
+}
+
+int get_tot_bytes()
+{
+    return tot_bytes;
 }

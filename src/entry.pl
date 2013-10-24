@@ -26,8 +26,8 @@ sub send {
             when (/Int/) {
                 $msg->snd($msgtype, $s." ".4, IPC_NOWAIT) or die "send message failed: $!";
             }
-            when (/"(.+)"/) {
-                $s =~ s/"(.+)"/$1/;
+            when (/(.*)"(.+)"/) {
+                $s =~ s/(.*)"(.+)"/$1$2/;
                 $msg->snd($msgtype, $s, IPC_NOWAIT) or die "send message failed: $!";
             }
             default {
@@ -37,7 +37,9 @@ sub send {
     }
 }
 
+print "CATTYDB SQL INPUT >> ";
 while (<STDIN>) {
+    print "CATTYDB SQL INPUT >> ";
     given ($_) {
 	when (/CREATE +TABLE +([a-zA-Z]+)\((.+)\)/) {
 	    my $tb_name = $1;          
@@ -54,7 +56,7 @@ while (<STDIN>) {
 	when (/DELETE FROM (.+) WHERE (.+)/) {
             my $tb_name = $1;
             my $tb_vl = $2;
-            &send(3, $tb_name, split / *= */, $tb_vl);
+            &send(3, $tb_name, $tb_vl, "TAIL");
         }
 	when (/UPDATE (.+) SET (.+) WHERE (.+)/) {}
 	when (/SELECT (.+) FROM (.+)/) {
@@ -70,4 +72,5 @@ while (<STDIN>) {
     }
 }
 
+print "\n";
 $msg->remove();
