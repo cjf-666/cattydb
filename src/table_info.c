@@ -58,3 +58,25 @@ const char* get_type_by_num(int num)
         item_num_cross_bd();
     return item_arr[num].item_type;
 }
+
+const char* get_type_by_name(const char* name)
+{
+    int i = 0;
+    for (;i < item_num; i++) {
+        if (!strcmp(item_arr[i].item_name, name))
+            return item_arr[i].item_name;
+    }
+    item_name_not_exist();
+}
+
+int get_bef_by_name(const char* it_nm)
+{
+    int i = 0;
+    int tot = 0;
+    for (;i < item_num; i++) {
+        tot += get_by_num(i);
+        if (!strcmp(item_arr[i].item_name, it_nm))
+            return tot;
+    }
+    item_name_not_exist();
+}
