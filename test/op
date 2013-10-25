@@ -7,3 +7,5 @@ DELETE FROM Product WHERE quality = "verygood"
 DELETE FROM product WHERE ID = 123
 
 CREATE TABLE Test(primary Char(16) a, Int id)
+
+SELECT * FROM Product

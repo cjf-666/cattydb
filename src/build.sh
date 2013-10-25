@@ -9,5 +9,5 @@ gcc -g -c errhdl.c -o errhdl.o
 gcc -g -c delete.c -o delete.o
 gcc -g -c where.c -o where.o
 gcc -g -c showtable.c -o showtable.o
-gcc -g errhdl.o buffer.o crea.o table_info.o showtable.o where.o delete.o insert.o des.o select.o main.o
+gcc -g errhdl.o buffer.o crea.o table_info.o showtable.o where.o delete.o insert.o des.o main.o
 mv a.out ../test/

@@ -81,7 +81,9 @@ while (<STDIN>) {
                 &send(5,$2);
             }
         }
-	when (/SELECT (.+) FROM (.+) WHERE/) {}
+	when (/SELECT (.+) FROM (.+) WHERE (.+)/) {
+            
+        }
         when (/#quit/) {&send(6);}
     }
 }

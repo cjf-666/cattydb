@@ -7,17 +7,22 @@ typedef struct tuple_buffer {
     FILE* db_file;
 };
 
+int almosteof(FILE* fp)
+{
+    char x;
+    int n = fread(&x, 1, 1, fp);
+    if (!n) return -1;
+    else {
+        fseek(fp, -1, SEEK_CUR);
+        return 0;
+    }
+}
 int eobuf(tuple_buffer* tp)
 {
-    if (tp->top == tp->buf + tp->byte_num)
-    {
-        if (feof(tp->db_file)) return -1;
-        buf_move_forward(tp, 1);
-        if (tp->byte_num==0)
-            return -1;
-        else buf_move_backward(tp, 1);
-    }
-    return 0;
+    if (tp->top == tp->buf + tp->byte_num && (feof(tp->db_file) || almosteof(tp->db_file)))
+        return -1;
+    else 
+        return 0;
 }
 
 tuple_buffer* in_buf_create(char* df_name)
