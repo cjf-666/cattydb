@@ -82,7 +82,9 @@ while (<STDIN>) {
             if ($tb_name =~ /,/) {
                 &send('a', (split / *, */, $tb_name), $pro);
             }
-            else &send(8, $tb_name, $pro, (split / *, */, $tb_arg), "TAIL");
+            else {
+                &send(8, $tb_name, $pro, (split / *, */, $tb_arg), "TAIL");
+            }
         }
         when (/SELECT (.+) FROM (.+)/) {
             if ($1 eq '*') {

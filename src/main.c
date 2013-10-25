@@ -148,11 +148,12 @@ int main(int args, char* argvs[])
             strcpy(tmp[0], string_item.text);
             result = receive(0);
             string_item.text[result]='\0';
-            equijoins_on_open(tmp[0], string_item.text);
+            equijoins_on_open(tmp[0], string_item.text, "tmp");
             result = receive(0);
             string_item.text[result]='\0';
             equijoins(string_item.text);
             equijoins_on_close();
+            show_table("tmp");
         }
     }
 

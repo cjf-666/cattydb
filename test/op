@@ -13,3 +13,5 @@ SELECT * FROM Product
 SELECT name,amount FROM Product WHERE quality = "verygood"
 
 UPDATE Product SET name = "haolei" WHERE quality = "bad"
+
+SELECT * FROM product, test WHERE test.ID = product.ID
