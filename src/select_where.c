@@ -31,16 +31,41 @@ void select_where_on_open(const char* file, const char* file_new)
 void select_where(const char* pro)
 {
     char item[2][STRING_LENGTH];
-    sscanf(pro, "%s = %s", item[0], item[1]);
+    int (*f)();
+    int flag_not = 0, i;
+    char pro_t[STRING_LENGTH];
+    if (strstr(pro,"not ") != NULL) {
+        flag_not = 1;
+        for (i = 4; pro[i]; ++i)
+            pro_t[i-4] = pro[i];
+        pro_t[i] = 0;
+    } else strcpy(pro_t,pro);
+    //printf("%d\n",flag_not);
+    if (strchr(pro_t,'=') != NULL) {
+        sscanf(pro_t, "%s = %s", item[0], item[1]);
+        if (flag_not) f = where_equal1;
+        else f = where_equal1_n;
+    }
+    if (strchr(pro_t,'>') != NULL) {
+        sscanf(pro_t, "%s > %s", item[0], item[1]);
+        if (flag_not) f = where_bigger1;
+        else f = where_bigger1_n;
+    }
+    if (strchr(pro_t,'<') != NULL) {
+        sscanf(pro_t, "%s < %s", item[0], item[1]);
+        if (flag_not) f = where_smaller1;
+        else f = where_smaller1_n;
+    }
     while (!eobuf(dat_file)) {
-        if (where_equal1(dat_file, item[0], item[1])) {
+        if (f(dat_file, item[0], item[1])) {
             buf_move_backward(dat_file, get_tot_bytes()+1);
             int i;
-            for (i = 0; i <= get_tot_bytes(); ++i) 
+            for (i = 0; i <= get_tot_bytes(); ++i)
                 buf_push_char(new_file, buf_get_char(dat_file));
         }
     }
 }
+
 
 void select_where_on_close()
 {
