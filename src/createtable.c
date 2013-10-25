@@ -1,31 +1,30 @@
 #include "createtable.h"
 
-tuple_buffer* p;
-void create_table(char* table_name)
+FILE* tb;
+void create_table(const char* table_name)
 {
-        int i;
-        char file_name[MAXFILENAME];
-        strcpy(file_name,table_name);
-        strcat(file_name,".m");
-        p = out_buf_create(file_name,"wb");
-        for (i = 0; table_name[i]; ++i)
-                buf_push_char(p, table_name[i]);
-        buf_push_char(p, '\n');
+        char tb_name[TABLE_NAME_LEN];
+        strcpy(tb_name, table_name);
+        tb = fopen(strcat(tb_name, ".m"), "w");
+        fprintf(tb, "%s\n", table_name);
+
 }
-void create_col(char* col_name,char* col_type,int num)
+void create_col(const char* col_name, const char* col_type, int num, int is_primary)
 {
-        int i;
-        for (i = 0; col_name[i]; ++i)
-                buf_push_char(p, col_name[i]);
-        buf_push_char(p, ' ');
-        for (i = 0; col_type[i]; ++i)
-                buf_push_char(p, col_type[i]);
-        buf_push_char(p, ' ');
-        buf_push_int(p, num);
-        buf_push_char(p, '\n');
+        fprintf(tb, is_primary?"0 %s %s %d\n":"1 %s %s %d\n", col_name, col_type, num);
 }
 void create_table_on_close()
 {
-        buf_push_char(p, '`');
-        out_buf_remove(p);
+        fclose(tb);
 }
+/*
+int main()
+{
+        create_table("product");
+        create_col("ID","Int",4,1);
+        create_col("Name","Char",10,0);
+        create_col("Type","Char",10,0);
+        create_table_on_close();
+        return 0;
+}*/
+

@@ -3,6 +3,7 @@
 #include "describe.h"
 #include "insert.h"
 #include "delete.h"
+#include "showtable.h"
 
 #include <sys/msg.h>
 #include <stdio.h>
@@ -42,9 +43,12 @@ int main(int args, char* argvs[])
                 string_item.text[result]='\0';
                 if (!strcmp(string_item.text, "TAIL"))
                     break;
-                sscanf(string_item.text, "%s %s %d", col_type, col_name, &col_length);
-                create_col(col_name, col_type, col_length);
+                sscanf(string_item.text, "%s %s %s %d", tmp[0], col_type, col_name, &col_length);
+                if (tmp[0][0] == '0')
+                    create_col(col_name, col_type, col_length, 0);
+                else create_col(col_name, col_type, col_length, 1);
             }
+            
             if (-1 == result)
                 ipc_msgrcv_failed(errno);
 
@@ -96,9 +100,7 @@ int main(int args, char* argvs[])
             result = receive(0);
             string_item.text[result]='\0';
             printf("%s\n", string_item.text);
-            select_on_open(string_item.text);
-            select_all();
-            select_on_close();
+            show_table(string_item.text);
             break;
         }
     }

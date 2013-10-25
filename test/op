@@ -5,3 +5,5 @@ INSERT INTO Product VALUES("bc", 4, "bad")
 DELETE FROM Product WHERE quality = "verygood"
 
 DELETE FROM product WHERE ID = 123
+
+CREATE TABLE Test(primary Char(16) a, Int id)

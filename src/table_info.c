@@ -1,14 +1,6 @@
 #include "table_info.h"
 
-struct item_st {
-    char item_name[ITEM_NAME_LEN];
-    char item_type[ITEM_TYPE_LEN];
-    int  item_byte;
-    int is_pr;
-} item_arr[ITEM_NUM];
-
 char table_name[TABLE_NAME_LEN];
-int item_num;
 int tot_bytes;
 
 void table_set(const char* tb_name)
@@ -87,4 +79,14 @@ int get_bef_by_name(const char* it_nm)
 int get_tot_bytes()
 {
     return tot_bytes;
+}
+
+int get_pos_by_name(const char* it_nm)
+{
+    int i = 0;
+    for (;i < item_num; i++) {
+        if (!strcmp(item_arr[i].item_name, it_nm))
+            return i;
+    }
+    item_name_not_exist();
 }
