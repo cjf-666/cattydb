@@ -4,6 +4,8 @@
 #include "insert.h"
 #include "delete.h"
 #include "showtable.h"
+#include "select_col.h"
+#include "select_where.h"
 
 #include <sys/msg.h>
 #include <stdio.h>
@@ -101,6 +103,32 @@ int main(int args, char* argvs[])
             string_item.text[result]='\0';
             printf("%s\n", string_item.text);
             show_table(string_item.text);
+            break;
+        case '8':
+            result=receive(0);
+            string_item.text[result]='\0';
+            select_where_on_open(string_item.text, "tmp");
+            
+            result=receive(0);
+            string_item.text[result]='\0';
+            select_where(string_item.text);
+            select_where_on_close();
+
+            select_col_on_open("tmp", "tmp2");
+            
+            result = 0;
+            while ((result = receive(0)) != -1) {
+                string_item.text[result]='\0';
+                if (!strcmp(string_item.text, "TAIL"))
+                    break;
+                select_col_get_pos(string_item.text);
+            }
+            if (-1 == result)
+                ipc_msgrcv_failed(errno);
+
+            select_col();
+            select_col_on_close();
+            show_table("tmp2");
             break;
         }
     }

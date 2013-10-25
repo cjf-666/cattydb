@@ -73,16 +73,19 @@ while (<STDIN>) {
             &send(3, $tb_name, $tb_vl, "TAIL");
         }
 	when (/UPDATE (.+) SET (.+) WHERE (.+)/) {}
-	when (/SELECT (.+) FROM (.+)/) {
+	when (/SELECT (.+) FROM (.+) WHERE (.+)/) {
+            my $tb_arg = $1;
+            my $tb_name = $2;
+            my $pro = $3;
+            &send(8, $tb_name, $pro, (split / *, */, $tb_arg), "TAIL");
+        }
+        when (/SELECT (.+) FROM (.+)/) {
             if ($1 eq '*') {
                 &send(7,$2);
             }
             else {
                 &send(5,$2);
             }
-        }
-	when (/SELECT (.+) FROM (.+) WHERE (.+)/) {
-            
         }
         when (/#quit/) {&send(6);}
     }
