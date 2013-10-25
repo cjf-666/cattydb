@@ -1,28 +1,5 @@
 #include "equijoins.h"
 
-tuple_buffer* dat_file_1;
-tuple_buffer* dat_file_2;
-tuple_buffer* new_file;
-int tot;
-int pos[100];
-
-typedef struct item_set {
-        char item_name[ITEM_NAME_LEN];
-        char item_type[ITEM_TYPE_LEN];
-        int  item_byte;
-        int is_pr;
-} item_set;
-item_set item_1[50], item_2[50];
-int item_num_1, item_num_2;
-char file_n_1[TABLE_NAME_LEN];
-char file_n_2[TABLE_NAME_LEN];
-char tb_m_1[TABLE_NAME_LEN];
-char tb_m_2[TABLE_NAME_LEN];
-char tb_m_s[TABLE_NAME_LEN];
-char tb_d_1[TABLE_NAME_LEN];
-char tb_d_2[TABLE_NAME_LEN];
-char tb_d_s[TABLE_NAME_LEN];
-
 void equijoins_on_open(const char* file_1, const char* file_2, const char* file_new)
 {
         strcpy(file_n_1, file_1);
