@@ -11,3 +11,5 @@ CREATE TABLE Test(primary Char(16) a, Int id)
 SELECT * FROM Product
 
 SELECT name,amount FROM Product WHERE quality = "verygood"
+
+UPDATE Product SET name = "haolei" WHERE quality = "bad"

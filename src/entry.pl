@@ -72,12 +72,17 @@ while (<STDIN>) {
             my $tb_vl = $2;
             &send(3, $tb_name, $tb_vl, "TAIL");
         }
-	when (/UPDATE (.+) SET (.+) WHERE (.+)/) {}
+	when (/UPDATE (.+) SET (.+) WHERE (.+)/) {
+            &send(9, $1, $2, $3);
+        }
 	when (/SELECT (.+) FROM (.+) WHERE (.+)/) {
             my $tb_arg = $1;
             my $tb_name = $2;
             my $pro = $3;
-            &send(8, $tb_name, $pro, (split / *, */, $tb_arg), "TAIL");
+            if ($tb_name =~ /,/) {
+                &send('a', (split / *, */, $tb_name), $pro);
+            }
+            else &send(8, $tb_name, $pro, (split / *, */, $tb_arg), "TAIL");
         }
         when (/SELECT (.+) FROM (.+)/) {
             if ($1 eq '*') {

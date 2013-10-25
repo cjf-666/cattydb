@@ -6,6 +6,7 @@
 #include "showtable.h"
 #include "select_col.h"
 #include "select_where.h"
+#include "update.h"
 
 #include <sys/msg.h>
 #include <stdio.h>
@@ -130,6 +131,28 @@ int main(int args, char* argvs[])
             select_col_on_close();
             show_table("tmp2");
             break;
+        case '9':
+            result = receive(0);
+            string_item.text[result]='\0';
+            update_on_open(string_item.text);
+            result = receive(0);
+            string_item.text[result]='\0';
+            strcpy(tmp[0], string_item.text);
+            result = receive(0);
+            string_item.text[result]='\0';
+            update(tmp[0], string_item.text); 
+            break;
+        case 'a':
+            result = receive(0);
+            string_item.text[result]='\0';
+            strcpy(tmp[0], string_item.text);
+            result = receive(0);
+            string_item.text[result]='\0';
+            equijoins_on_open(tmp[0], string_item.text);
+            result = receive(0);
+            string_item.text[result]='\0';
+            equijoins(string_item.text);
+            equijoins_on_close();
         }
     }
 
