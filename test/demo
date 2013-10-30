@@ -1,0 +1,35 @@
+CREATE TABLE student(primary Int id, Char(10) name, Char(10) sex)
+CREATE TABLE major(primary Int id, Char(25) major)
+
+DESCRIBE student
+DESCRIBE major
+
+INSERT INTO student VALUES(1, "Alice", "Female")
+INSERT INTO student VALUES(2, "Bob", "Male")
+INSERT INTO student VALUES(3, "Conan", "Male")
+INSERT INTO student VALUES(4, "Dijks", "Male")
+INSERT INTO student VALUES(5, "Ella", "Female")
+
+SELECT * FROM student
+
+INSERT INTO major VALUES(1, "ComputerScience")
+INSERT INTO major VALUES(2, "ComputerScience")
+INSERT INTO major VALUES(3, "SpaceTech")
+INSERT INTO major VALUES(4, "Biology")
+INSERT INTO major VALUES(5, "Math")
+INSERT INTO major VALUES(6, "Philosophy")
+
+SELECT * FROM major
+
+DELETE FROM major WHERE major = "Philosophy"
+
+SELECT * FROM major
+
+SELECT name,sex FROM student WHERE sex = "Female"
+SELECT id,name FROM student WHERE not id < 3
+
+UPDATE major SET major = "Math" WHERE id = 2
+SELECT * FROM major
+
+SELECT * FROM student, major WHERE student.id = major.id
+
