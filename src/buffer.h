@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BUF_SIZE 10
+#define BUF_SIZE 512
 
 typedef struct tuple_buffer tuple_buffer;
 tuple_buffer* in_buf_create(char* df_name);

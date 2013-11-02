@@ -7,9 +7,15 @@ void show_table(const char* tb_name)
     strcpy(data_name, tb_name);
     strcat(data_name, ".dat");
     tuple_buffer* buf = in_buf_create(data_name);
-    int i;
+    int i,j;
+    puts("");
     for (i = 0; i < item_num; ++i)
         printf("%s\t\t\t", item_arr[i].item_name);
+    putchar('\n');
+    for (i = 0; i < item_num; ++i) {
+        for (j = 0; item_arr[i].item_name[j]; ++j) putchar('-');
+    	printf("\t\t\t");
+    }
     putchar('\n');
     while(!eobuf(buf)) {
         int is_in = !buf_get_char(buf);

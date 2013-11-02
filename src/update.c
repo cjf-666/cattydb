@@ -13,6 +13,7 @@ void update_on_open(const char* fn)
 void update(char* new_val, char* pro)
 {
     char item[4][STRING_LENGTH];
+    memset(item,0,sizeof(item));
     sscanf(pro, "%s = %s", item[0], item[1]);
     sscanf(new_val, "%s = %s", item[2], item[3]);
 

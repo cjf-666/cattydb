@@ -40,6 +40,7 @@ int main(int args, char* argvs[])
         case '0':
             result=receive(0);
             string_item.text[result]='\0';
+	    strcpy(tb_name, string_item.text);
             create_table(string_item.text);
             result = 0;
             while ((result = receive(0)) != -1) {
@@ -54,8 +55,8 @@ int main(int args, char* argvs[])
             
             if (-1 == result)
                 ipc_msgrcv_failed(errno);
-
             create_table_on_close();
+            printf("CATTYDB : database %s successfully created.\n",tb_name);
             break;
         case '1':
             result=receive(0);

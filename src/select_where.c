@@ -40,20 +40,20 @@ void select_where(const char* pro)
             pro_t[i-4] = pro[i];
         pro_t[i] = 0;
     } else strcpy(pro_t,pro);
-    //printf("%d\n",flag_not);
+
     if (strchr(pro_t,'=') != NULL) {
         sscanf(pro_t, "%s = %s", item[0], item[1]);
-        if (flag_not) f = where_equal1;
+        if (!flag_not) f = where_equal1;
         else f = where_equal1_n;
     }
     if (strchr(pro_t,'>') != NULL) {
         sscanf(pro_t, "%s > %s", item[0], item[1]);
-        if (flag_not) f = where_bigger1;
+        if (!flag_not) f = where_bigger1;
         else f = where_bigger1_n;
     }
     if (strchr(pro_t,'<') != NULL) {
         sscanf(pro_t, "%s < %s", item[0], item[1]);
-        if (flag_not) f = where_smaller1;
+        if (!flag_not) f = where_smaller1;
         else f = where_smaller1_n;
     }
     while (!eobuf(dat_file)) {

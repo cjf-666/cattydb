@@ -8,8 +8,10 @@ void describe_table(const char* table_name)
     strcpy(file_name,table_name);
 
     FILE* tb = fopen(strcat(file_name,".m"), "r");
+    puts("");
     printf("Table: %s\n", table_name);
     printf("%s\t\t\t%s\t\t\t%s\n","Field","Type","Primary");
+    printf("%s\t\t\t%s\t\t\t%s\n","-----","----","-------");
     table_set(table_name);
     int i;
     for (i = 0; i < item_num; ++i) {
